@@ -37,4 +37,15 @@ class Project(models.Model):
         return (self.name)
 
 
+class Task(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    assign = models.ManyToManyField(User)
+    task_name = models.CharField(max_length=80)
+    status = models.CharField(max_length=7, choices=status, default=1)
+    due = models.CharField(max_length=7, choices=due, default=1)
 
+    class Meta:
+        ordering = ['project', 'task_name']
+
+    def __str__(self):
+        return(self.task_name)
