@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+{% load staticfiles %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active">Home</li>
+{% endblock breadcrumb%}
+
+{% block content %}
+<div class="container-fluid">
+  <div id="ui-view" style="opacity: 1;"><div class="animated fadeIn">
+    <div class="row">
+    <div class="col-12">
+      <div class="card">
+      <div class="card-header">
+        <i class="fa fa-align-justify"></i>
+        <div class="card-actions">
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="jumbotron bg-white">
+          <h1 class="display-4">Hello, Everyone!</h1>
+          <p class="lead">Welcome to the Aiesec Management System.</p>
+          <hr class="my-4">
+          <p>Register your team and start managing your projects</p>
+          <p>That's it, simple, easy, fast.</p>
+          <p class="lead">
+            <a class="btn btn-primary btn-lg" href="{% url 'register:new-team' %}" role="button">Set up your team</a>
+          </p>
+          {% if not user.is_authenticated %}
+          <a href="{% url 'core:login' %}">Click here if you are already registered</a>
+          {% endif %}
+        </div>
+      </div>
+      </div>
+    </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
