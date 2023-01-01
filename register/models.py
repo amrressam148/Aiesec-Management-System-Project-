@@ -1,0 +1,42 @@
+from django.db import models
+from django.contrib.auth.models import User
+from projects.models import Project
+# Create your models here.
+class Team(models.Model):
+    social_name = models.CharField(max_length=80)
+    name = models.CharField(max_length=80)
+    email = models.EmailField()
+    city = models.CharField(max_length=50)
+    found_date = models.DateField()
+
+    class Meta:
+        verbose_name_plural = 'Teams'
+        ordering = ('name',)
+
+
+    def __str__(self):
+        return (self.name)
+
+class UserProfile(models.Model):
+    user    = models.ForeignKey(User, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    project = models.ManyToManyField(Project, blank=True)
+    friends = models.ManyToManyField('self', blank=True)
+    img    = models.ImageField(upload_to='core/avatar', blank=True, default='core/avatar/blank_profile.png')
+    type   =models.CharField(max_length=20)
+
+
+
+    def __str__(self):
+        return (str(self.user))
+
+    def invite(self, invite_profile):
+        invite = Invite(inviter=self, invited=invite_profile)
+        invites = invite_profile.received_invites.filter(inviter_id=self.id)
+        if not len(invites) > 0:    # don't accept duplicated invites
+            invite.save()
+
+    def remove_friend(self, profile_id):
+        friend = UserProfile.objects.filter(id=profile_id)[0]
+        self.friends.remove(friend)
+
