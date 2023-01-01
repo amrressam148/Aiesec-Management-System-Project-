@@ -40,3 +40,16 @@ class UserProfile(models.Model):
         friend = UserProfile.objects.filter(id=profile_id)[0]
         self.friends.remove(friend)
 
+
+
+class Invite(models.Model):
+    inviter = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='made_invites')
+    invited = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='received_invites')
+
+    def accept(self):
+        self.invited.friends.add(self.inviter)
+        self.inviter.friends.add(self.invited)
+        self.delete()
+
+    def __str__(self):
+        return str(self.inviter)
